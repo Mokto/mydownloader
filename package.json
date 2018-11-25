@@ -1,0 +1,36 @@
+{
+  "name": "localserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tslint {components,pages}/**/*.{ts,tsx}",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@shopify/polaris": "^3.1.1",
+    "@zeit/next-typescript": "^1.1.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "mobx": "^5.6.0",
+    "mobx-react": "^5.4.2",
+    "next": "^7.0.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.6",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "prettier": "^1.15.2",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.1.6"
+  }
+}

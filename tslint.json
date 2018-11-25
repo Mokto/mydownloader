@@ -1,0 +1,15 @@
+{
+    "extends": [
+      "tslint:latest",
+      "tslint-react",
+      "tslint-plugin-prettier",
+      "tslint-config-prettier"
+    ],
+    "rules": {
+      "prettier": [true, { "singleQuote": true }],
+      "no-submodule-imports": false,
+      "no-console": false,
+      "object-literal-sort-keys": false,
+      "no-implicit-dependencies": false
+    }
+  }
