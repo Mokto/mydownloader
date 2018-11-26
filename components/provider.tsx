@@ -3,7 +3,7 @@ import Router from 'next/router';
 import React, { PureComponent } from 'react';
 import { RootStore } from 'stores/root';
 
-const rootStore = new RootStore();
+export const rootStore = new RootStore();
 
 export default class LeftNavigation extends PureComponent {
   public goTo = path => () => {
