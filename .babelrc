@@ -19,7 +19,8 @@
             "components": "./components",
             "forms": "./forms",
             "stores": "./stores",
-            "services": "./services"
+            "services": "./services",
+            "models": "./models"
           }
         }
       ]

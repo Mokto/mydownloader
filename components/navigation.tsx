@@ -14,7 +14,7 @@ export default class LeftNavigation extends PureComponent {
           title="Main"
           items={[
             {
-              label: 'Home',
+              label: 'Torrents',
               icon: 'home',
               onClick: this.goTo('/')
             }

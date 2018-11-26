@@ -1,21 +1,10 @@
 import { observable } from 'mobx';
+import { ILink } from 'models/link';
 
 export class LinksStore {
   public rootStore;
 
-  @observable public links: Array<{
-    id: number;
-    url: string;
-    name: string;
-    type: 'movie' | 'tv-show';
-    season: number;
-    episode: number;
-    torrentDebriding: boolean;
-    linkDownloading: boolean;
-    percentage: number;
-    size: number;
-    speed: number;
-  }> = [];
+  @observable public links: ILink[] = [];
 
   constructor(rootStore) {
     this.rootStore = rootStore;
