@@ -6,7 +6,7 @@ import {
   ProgressBar
 } from '@shopify/polaris';
 import { inject, observer } from 'mobx-react';
-import { ILink } from 'models/link';
+import { ILink, TorrentState } from 'models/link';
 import React, { Component } from 'react';
 import { LinksStore } from 'stores/links';
 import { UiStore } from 'stores/ui';
@@ -49,8 +49,27 @@ export default class LinkLists extends Component<ILinkListsProps> {
     const remaining = (link.size * (100 - link.percentage)) / 100;
     const seconds = Math.round(remaining / link.speed);
     return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
-    return `${Math.round(remaining / link.speed)}s`;
   }
+
+  public getState = (link: ILink) => {
+    switch (link.torrentState) {
+      case TorrentState.TORRENT_QUEUING:
+        return 'Torrent queuing (1/5)';
+      case TorrentState.TORRENT_DOWNLOADING:
+        return 'Torrent downloading (2/5)';
+      case TorrentState.TORRENT_UPLOADING:
+        return 'Torrent uploading (3/5)';
+      case TorrentState.TORRENT_DONE:
+        return 'Torrent ready to download';
+    }
+  };
+
+  public shouldShowProgress = (link: ILink) => {
+    return (
+      link.torrentState === TorrentState.TORRENT_DOWNLOADING ||
+      link.torrentState === TorrentState.TORRENT_UPLOADING
+    );
+  };
 
   public render() {
     const { linksStore } = this.props;
@@ -67,7 +86,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
       );
     }
 
-    const done = false
+    const done = false;
 
     return (
       <Layout>
@@ -75,19 +94,16 @@ export default class LinkLists extends Component<ILinkListsProps> {
           const items = [
             {
               term: 'State',
-              description: link.
-                ? 'Downloaded'
-                : link.torrentDownloading
-                ? 'Downloading torrent (1/2)'
-                : link.torrentUploading
-                ? 'Uploading torrent (2/2)'
-            },
-            {
-              term: 'Size',
-              description: `${this.toMB(link.size)}MB`
+              description: this.getState(link)
             }
           ];
-          if (!done) {
+          if (link.torrentState !== TorrentState.TORRENT_QUEUING) {
+            items.push({
+              term: 'Size',
+              description: `${this.toMB(link.size)}MB`
+            });
+          }
+          if (this.shouldShowProgress(link)) {
             items.push({
               term: 'Estimated',
               description: `${this.estimate(link)} (${this.toMB(
@@ -103,7 +119,9 @@ export default class LinkLists extends Component<ILinkListsProps> {
                 actions={[{ content: 'Delete' }]}
               >
                 <DescriptionList items={items} />
-                <ProgressBar progress={done ? 100 : link.percentage} />
+                {this.shouldShowProgress(link) && (
+                  <ProgressBar progress={link.percentage} />
+                )}
               </Card>
             </Layout.Section>
           );
