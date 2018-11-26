@@ -17,7 +17,7 @@ export class RootStore {
 
       socket.onmessage = (eventName, links) => {
         if (eventName === 'links') {
-          this.linksStore.links = links;
+          this.linksStore.links = links.reverse();
         }
       };
     } catch (e) {

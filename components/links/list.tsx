@@ -6,7 +6,7 @@ import {
   ProgressBar
 } from '@shopify/polaris';
 import { inject, observer } from 'mobx-react';
-import { ILink, TorrentState } from 'models/link';
+import { DownloadState, ILink, TorrentState } from 'models/link';
 import React, { Component } from 'react';
 import { LinksStore } from 'stores/links';
 import { UiStore } from 'stores/ui';
@@ -20,6 +20,22 @@ interface ILinkListsProps {
 @inject('uiStore')
 @observer
 export default class LinkLists extends Component<ILinkListsProps> {
+  public delete = (link: ILink) => async () => {
+    const { uiStore } = this.props;
+    uiStore.loading = true;
+    uiStore.error = null;
+    try {
+      await fetch(`http://localhost:9000/download/${link.id}`, {
+        method: 'delete'
+      });
+    } catch (e) {
+      uiStore.error = 'Delete Link failed.';
+      console.log(e);
+    }
+
+    uiStore.loading = false;
+  };
+
   public openDialog = () => {
     this.props.uiStore.addContentDialog = true;
   };
@@ -52,6 +68,19 @@ export default class LinkLists extends Component<ILinkListsProps> {
   }
 
   public getState = (link: ILink) => {
+    if (link.torrentState === TorrentState.TORRENT_DONE) {
+      switch (link.downloadState) {
+        case DownloadState.DOWNLOAD_NOT_READY:
+        case DownloadState.DOWNLOAD_DEBRIDING:
+          return 'Getting downloadable link (4/6)';
+        case DownloadState.DOWNLOAD_DOWNLOADING:
+          return 'File(s) downloading (5/6)';
+        case DownloadState.DOWNLOAD_DECOMPRESSING:
+          return 'File(s) being decompressed (6/6)';
+        case DownloadState.DOWNLOAD_DONE:
+          return 'File(s) downloaded';
+      }
+    }
     switch (link.torrentState) {
       case TorrentState.TORRENT_QUEUING:
         return 'Torrent queuing (1/5)';
@@ -59,8 +88,6 @@ export default class LinkLists extends Component<ILinkListsProps> {
         return 'Torrent downloading (2/5)';
       case TorrentState.TORRENT_UPLOADING:
         return 'Torrent uploading (3/5)';
-      case TorrentState.TORRENT_DONE:
-        return 'Torrent ready to download';
     }
   };
 
@@ -85,8 +112,6 @@ export default class LinkLists extends Component<ILinkListsProps> {
         </EmptyState>
       );
     }
-
-    const done = false;
 
     return (
       <Layout>
@@ -116,12 +141,15 @@ export default class LinkLists extends Component<ILinkListsProps> {
               <Card
                 sectioned={true}
                 title={this.getTitle(link)}
-                actions={[{ content: 'Delete' }]}
+                actions={[{ content: 'Delete', onAction: this.delete(link) }]}
               >
                 <DescriptionList items={items} />
                 {this.shouldShowProgress(link) && (
                   <ProgressBar progress={link.percentage} />
                 )}
+                {/* {link.links &&
+                  link.links.length &&
+                  link.links.map(linkUrl => <p key="link">{linkUrl}</p>)} */}
               </Card>
             </Layout.Section>
           );

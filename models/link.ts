@@ -11,6 +11,8 @@ export interface ILink {
   percentage: number;
   size: number;
   speed: number;
+
+  links?: string[];
 }
 
 export enum TorrentState {
@@ -22,7 +24,8 @@ export enum TorrentState {
 
 export enum DownloadState {
   DOWNLOAD_NOT_READY = 0,
-  DOWNLOAD_QUEUING = 1,
+  DOWNLOAD_DEBRIDING = 1,
   DOWNLOAD_DOWNLOADING = 2,
-  DOWNLOAD_DONE = 3
+  DOWNLOAD_DECOMPRESSING = 3,
+  DOWNLOAD_DONE = 4
 }
