@@ -3,21 +3,20 @@ import {
   FormLayout,
   Modal,
   RadioButton,
-  TextField,
-  VisuallyHidden
+  TextField
 } from '@shopify/polaris';
 import fetch from 'isomorphic-unfetch';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { LinksStore } from 'stores/links';
+import { DownloadsStore } from 'stores/downloads';
 import { UiStore } from 'stores/ui';
 
 interface IDirectLinkProps {
   uiStore?: UiStore;
-  linksStore?: LinksStore;
+  downloadsStore?: DownloadsStore;
 }
 
-@inject('linksStore')
+@inject('downloadsStore')
 @inject('uiStore')
 @observer
 export default class DirectLink extends Component<IDirectLinkProps> {
@@ -71,10 +70,10 @@ export default class DirectLink extends Component<IDirectLinkProps> {
 
   public render() {
     const { url, type, name, season, episode } = this.state;
-    const { linksStore, uiStore } = this.props;
+    const { downloadsStore, uiStore } = this.props;
 
     const button =
-      linksStore.links.length === 0
+      downloadsStore.downloads.length === 0
         ? []
         : [
             <Button

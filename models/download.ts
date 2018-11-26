@@ -1,4 +1,4 @@
-export interface ILink {
+export interface IDownload {
   id: number;
   name: string;
   type: 'movie' | 'tv-show';

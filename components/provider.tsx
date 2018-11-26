@@ -16,7 +16,7 @@ export default class LeftNavigation extends PureComponent {
         rootStore={rootStore}
         uiStore={rootStore.uiStore}
         providersStore={rootStore.providersStore}
-        linksStore={rootStore.linksStore}
+        downloadsStore={rootStore.downloadsStore}
       >
         {this.props.children}
       </Provider>

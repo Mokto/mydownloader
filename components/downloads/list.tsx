@@ -6,21 +6,21 @@ import {
   ProgressBar
 } from '@shopify/polaris';
 import { inject, observer } from 'mobx-react';
-import { DownloadState, ILink, TorrentState } from 'models/link';
+import { DownloadState, IDownload, TorrentState } from 'models/download';
 import React, { Component } from 'react';
-import { LinksStore } from 'stores/links';
+import { DownloadsStore } from 'stores/downloads';
 import { UiStore } from 'stores/ui';
 
 interface ILinkListsProps {
-  linksStore?: LinksStore;
+  downloadsStore?: DownloadsStore;
   uiStore?: UiStore;
 }
 
-@inject('linksStore')
+@inject('downloadsStore')
 @inject('uiStore')
 @observer
 export default class LinkLists extends Component<ILinkListsProps> {
-  public delete = (link: ILink) => async () => {
+  public delete = (link: IDownload) => async () => {
     const { uiStore } = this.props;
     uiStore.loading = true;
     uiStore.error = null;
@@ -40,7 +40,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
     this.props.uiStore.addContentDialog = true;
   };
 
-  public getTitle = (link: ILink) => {
+  public getTitle = (link: IDownload) => {
     if (!link.name) {
       return link.id;
     }
@@ -58,7 +58,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
     return Math.round(bytes * 0.00000095367432);
   }
 
-  public estimate(link: ILink) {
+  public estimate(link: IDownload) {
     if (!link.speed) {
       return '?';
     }
@@ -67,7 +67,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
     return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
   }
 
-  public getState = (link: ILink) => {
+  public getState = (link: IDownload) => {
     if (link.torrentState === TorrentState.TORRENT_DONE) {
       switch (link.downloadState) {
         case DownloadState.DOWNLOAD_NOT_READY:
@@ -91,7 +91,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
     }
   };
 
-  public shouldShowProgress = (link: ILink) => {
+  public shouldShowProgress = (link: IDownload) => {
     return (
       link.torrentState === TorrentState.TORRENT_DOWNLOADING ||
       link.torrentState === TorrentState.TORRENT_UPLOADING
@@ -99,9 +99,9 @@ export default class LinkLists extends Component<ILinkListsProps> {
   };
 
   public render() {
-    const { linksStore } = this.props;
-    const { links } = linksStore;
-    if (links.length === 0) {
+    const { downloadsStore } = this.props;
+    const { downloads } = downloadsStore;
+    if (downloads.length === 0) {
       return (
         <EmptyState
           heading="Manage your video content"
@@ -115,7 +115,7 @@ export default class LinkLists extends Component<ILinkListsProps> {
 
     return (
       <Layout>
-        {links.map(link => {
+        {downloads.map(link => {
           const items = [
             {
               term: 'State',

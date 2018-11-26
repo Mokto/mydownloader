@@ -1,7 +1,7 @@
 import { Page } from '@shopify/polaris';
+import DirectLinkAdd from 'components/downloads/direct-link-add';
+import LinksList from 'components/downloads/list';
 import MainLayout from 'components/layout';
-import DirectLink from 'components/links/direct-link';
-import LinksList from 'components/links/list';
 import Provider from 'components/provider';
 import React, { Component } from 'react';
 
@@ -11,7 +11,7 @@ export default class Index extends Component {
       <Provider>
         <MainLayout pageTitle="Home">
           <Page title="Home" titleHidden={true}>
-            <DirectLink />
+            <DirectLinkAdd />
             <LinksList />
           </Page>
         </MainLayout>
