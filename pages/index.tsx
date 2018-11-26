@@ -1,22 +1,18 @@
-import { Button, Card, Layout, Page } from '@shopify/polaris';
+import { Page } from '@shopify/polaris';
 import MainLayout from 'components/layout';
+import DirectLink from 'components/links/direct-link';
+import LinksList from 'components/links/list';
 import Provider from 'components/provider';
-import fetch from 'isomorphic-unfetch';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
-export default class Index extends PureComponent {
+export default class Index extends Component {
   public render() {
     return (
       <Provider>
         <MainLayout pageTitle="Home">
-          <Page title="Home">
-            {/* <Layout>
-            <Layout.Section>
-              <Card sectioned={true}>
-                <Button onClick={this.loginAllDebrid}>Login</Button>
-              </Card>
-            </Layout.Section>
-          </Layout> */}
+          <Page title="Home" titleHidden={true}>
+            <DirectLink />
+            <LinksList />
           </Page>
         </MainLayout>
       </Provider>

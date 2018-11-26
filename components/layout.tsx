@@ -19,7 +19,7 @@ export default class MainLayout extends Component<ILayoutProps> {
   public theme = {
     colors: {
       topBar: {
-        background: '#357997'
+        background: '#6371c7'
       }
     },
     logo: {

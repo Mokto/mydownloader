@@ -18,7 +18,8 @@
           "alias": {
             "components": "./components",
             "forms": "./forms",
-            "stores": "./stores"
+            "stores": "./stores",
+            "services": "./services"
           }
         }
       ]

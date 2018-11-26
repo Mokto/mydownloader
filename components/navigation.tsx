@@ -11,17 +11,12 @@ export default class LeftNavigation extends PureComponent {
     return (
       <Navigation location="/">
         <Navigation.Section
-          title="Misc"
+          title="Main"
           items={[
             {
-              label: 'Account',
+              label: 'Home',
               icon: 'home',
               onClick: this.goTo('/')
-            },
-            {
-              label: 'Test',
-              icon: 'orders',
-              onClick: this.goTo('/test')
             }
           ]}
         />

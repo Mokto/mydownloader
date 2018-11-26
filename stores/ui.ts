@@ -6,6 +6,7 @@ export class UiStore {
   @observable public showMobileNavigation = false;
   @observable public loading = false;
   @observable public error: string;
+  @observable public addContentDialog: boolean = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
