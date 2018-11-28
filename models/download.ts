@@ -1,7 +1,16 @@
 import { ILink } from './link';
 
+export const sortDownloads = (downloads: IDownload[]) => {
+  return downloads.sort((a, b) => {
+    const dateA = new Date(a.addedDate);
+    const dateB = new Date(b.addedDate);
+    return dateA > dateB ? -1 : dateA < dateB ? 1 : 0;
+  });
+};
+
 export interface IDownload {
   id: number;
+  addedDate: string;
   name: string;
   type: 'movie' | 'tv-show';
   season: number;

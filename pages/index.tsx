@@ -3,13 +3,14 @@ import DirectLinkAdd from 'components/downloads/direct-link-add';
 import LinksList from 'components/downloads/list';
 import MainLayout from 'components/layout';
 import Provider, { rootStore } from 'components/provider';
+import { sortDownloads } from 'models/download';
 import React, { Component } from 'react';
 
 export default class Index extends Component {
   public static async getInitialProps() {
     try {
       const res = await fetch('http://localhost:9000/download');
-      const downloads = (await res.json()).reverse();
+      const downloads = sortDownloads(await res.json());
       return { downloads };
     } catch (e) {
       return {};

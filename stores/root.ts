@@ -1,3 +1,4 @@
+import { sortDownloads } from 'models/download';
 import WebSocket from 'services/websocket';
 import { DownloadsStore } from './downloads';
 import { ProvidersStore } from './providers';
@@ -17,7 +18,7 @@ export class RootStore {
 
       socket.onmessage = (eventName, downloads) => {
         if (eventName === 'downloads') {
-          this.downloadsStore.downloads = downloads.reverse();
+          this.downloadsStore.downloads = sortDownloads(downloads);
         }
       };
     } catch (e) {
