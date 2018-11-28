@@ -9,7 +9,7 @@ export default class Index extends Component {
   public static async getInitialProps() {
     try {
       const res = await fetch('http://localhost:9000/download');
-      const downloads = await res.json();
+      const downloads = (await res.json()).reverse();
       return { downloads };
     } catch (e) {
       return {};

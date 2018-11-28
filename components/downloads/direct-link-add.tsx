@@ -22,7 +22,7 @@ interface IDirectLinkProps {
 export default class DirectLink extends Component<IDirectLinkProps> {
   public state = {
     url:
-      'magnet:?xt=urn:btih:4f22b019877ac74767dbb8e6c1ff3839fb44b28d&dn=Football+Manager+2016+%5BTest+Game%5D+-+Update+Version&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969',
+      'magnet:?xt=urn:btih:6a378a8fe70af90d5a8b5a22a35ac4a3d7741548&dn=Game+Of+Thrones+S05+Season+5+1080p+5.1Ch+Web-DL+ReEnc-DeeJayAhme&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969',
     type: 'movie',
     name: '',
     season: '',

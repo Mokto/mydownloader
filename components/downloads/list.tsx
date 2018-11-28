@@ -7,9 +7,11 @@ import {
 } from '@shopify/polaris';
 import { inject, observer } from 'mobx-react';
 import { DownloadState, IDownload, TorrentState } from 'models/download';
+import { ILink } from 'models/link';
 import React, { Component } from 'react';
 import { DownloadsStore } from 'stores/downloads';
 import { UiStore } from 'stores/ui';
+import Link from './link';
 
 interface ILinkListsProps {
   downloadsStore?: DownloadsStore;
@@ -19,7 +21,7 @@ interface ILinkListsProps {
 @inject('downloadsStore')
 @inject('uiStore')
 @observer
-export default class LinkLists extends Component<ILinkListsProps> {
+export default class DownloadsList extends Component<ILinkListsProps> {
   public delete = (link: IDownload) => async () => {
     const { uiStore } = this.props;
     uiStore.loading = true;
@@ -72,31 +74,38 @@ export default class LinkLists extends Component<ILinkListsProps> {
       switch (link.downloadState) {
         case DownloadState.DOWNLOAD_NOT_READY:
         case DownloadState.DOWNLOAD_DEBRIDING:
-          return 'Getting downloadable link (4/6)';
+          return 'Getting downloadable link (4/7)';
+        case DownloadState.DOWNLOAD_QUEUING:
+          return 'In download queue (5/7)';
         case DownloadState.DOWNLOAD_DOWNLOADING:
-          return 'File(s) downloading (5/6)';
+          return 'File(s) downloading (6/7)';
         case DownloadState.DOWNLOAD_DECOMPRESSING:
-          return 'File(s) being decompressed (6/6)';
+          return 'File(s) being decompressed (7/7)';
         case DownloadState.DOWNLOAD_DONE:
           return 'File(s) downloaded';
       }
     }
     switch (link.torrentState) {
       case TorrentState.TORRENT_QUEUING:
-        return 'Torrent queuing (1/5)';
+        return 'Torrent queuing (1/7)';
       case TorrentState.TORRENT_DOWNLOADING:
-        return 'Torrent downloading (2/5)';
+        return 'Torrent downloading (2/7)';
       case TorrentState.TORRENT_UPLOADING:
-        return 'Torrent uploading (3/5)';
+        return 'Torrent uploading (3/7)';
     }
   };
 
   public shouldShowProgress = (link: IDownload) => {
     return (
       link.torrentState === TorrentState.TORRENT_DOWNLOADING ||
-      link.torrentState === TorrentState.TORRENT_UPLOADING
+      link.torrentState === TorrentState.TORRENT_UPLOADING ||
+      link.downloadState === DownloadState.DOWNLOAD_DOWNLOADING
     );
   };
+
+  public getLinkName(link: ILink) {
+    return link.url.substring(link.url.lastIndexOf('/') + 1);
+  }
 
   public render() {
     const { downloadsStore } = this.props;
@@ -115,41 +124,45 @@ export default class LinkLists extends Component<ILinkListsProps> {
 
     return (
       <Layout>
-        {downloads.map(link => {
+        {downloads.map(download => {
           const items = [
             {
               term: 'State',
-              description: this.getState(link)
+              description: this.getState(download)
             }
           ];
-          if (link.torrentState !== TorrentState.TORRENT_QUEUING) {
+          if (download.torrentState !== TorrentState.TORRENT_QUEUING) {
             items.push({
               term: 'Size',
-              description: `${this.toMB(link.size)}MB`
+              description: `${this.toMB(download.size)}MB`
             });
           }
-          if (this.shouldShowProgress(link)) {
+          if (this.shouldShowProgress(download)) {
             items.push({
               term: 'Estimated',
-              description: `${this.estimate(link)} (${this.toMB(
-                link.speed
+              description: `${this.estimate(download)} (${this.toMB(
+                download.speed
               )}MB/s)`
             });
           }
           return (
-            <Layout.Section key={link.id} secondary={true}>
+            <Layout.Section key={download.id} secondary={true}>
               <Card
                 sectioned={true}
-                title={this.getTitle(link)}
-                actions={[{ content: 'Delete', onAction: this.delete(link) }]}
+                title={this.getTitle(download)}
+                actions={[
+                  { content: 'Delete', onAction: this.delete(download) }
+                ]}
               >
                 <DescriptionList items={items} />
-                {this.shouldShowProgress(link) && (
-                  <ProgressBar progress={link.percentage} />
+                {this.shouldShowProgress(download) && (
+                  <ProgressBar progress={download.percentage} />
                 )}
-                {/* {link.links &&
-                  link.links.length &&
-                  link.links.map(linkUrl => <p key="link">{linkUrl}</p>)} */}
+                {download.links &&
+                  download.links.length &&
+                  download.links.map(link => (
+                    <Link key={link.url} link={link} />
+                  ))}
               </Card>
             </Layout.Section>
           );

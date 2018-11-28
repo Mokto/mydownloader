@@ -1,3 +1,5 @@
+import { ILink } from './link';
+
 export interface IDownload {
   id: number;
   name: string;
@@ -12,7 +14,7 @@ export interface IDownload {
   size: number;
   speed: number;
 
-  links?: string[];
+  links?: ILink[];
 }
 
 export enum TorrentState {
@@ -25,7 +27,8 @@ export enum TorrentState {
 export enum DownloadState {
   DOWNLOAD_NOT_READY = 0,
   DOWNLOAD_DEBRIDING = 1,
-  DOWNLOAD_DOWNLOADING = 2,
-  DOWNLOAD_DECOMPRESSING = 3,
-  DOWNLOAD_DONE = 4
+  DOWNLOAD_QUEUING = 2,
+  DOWNLOAD_DOWNLOADING = 3,
+  DOWNLOAD_DECOMPRESSING = 4,
+  DOWNLOAD_DONE = 5
 }
