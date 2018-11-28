@@ -21,6 +21,13 @@ export class RootStore {
           this.downloadsStore.downloads = sortDownloads(downloads);
         }
       };
+
+      socket.onerror = () => {
+        this.uiStore.isBackendLive = false;
+      };
+      socket.onopen = () => {
+        this.uiStore.isBackendLive = true;
+      };
     } catch (e) {
       console.log(e);
     }

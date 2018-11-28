@@ -110,6 +110,11 @@ export default class DownloadsList extends Component<ILinkListsProps> {
   public render() {
     const { downloadsStore } = this.props;
     const { downloads } = downloadsStore;
+
+    if (!downloadsStore.downloads) {
+      return null;
+    }
+
     if (downloads.length === 0) {
       return (
         <EmptyState

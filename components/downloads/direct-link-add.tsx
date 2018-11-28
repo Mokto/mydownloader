@@ -72,6 +72,10 @@ export default class DirectLink extends Component<IDirectLinkProps> {
     const { url, type, name, season, episode } = this.state;
     const { downloadsStore, uiStore } = this.props;
 
+    if (!downloadsStore.downloads) {
+      return null;
+    }
+
     const button =
       downloadsStore.downloads.length === 0
         ? []

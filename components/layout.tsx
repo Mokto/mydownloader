@@ -1,4 +1,10 @@
-import { AppProvider, Frame, Loading, Toast } from '@shopify/polaris';
+import {
+  AppProvider,
+  EmptyState,
+  Frame,
+  Loading,
+  Toast
+} from '@shopify/polaris';
 import Header from 'components/header';
 import Navigation from 'components/navigation';
 import { inject, observer } from 'mobx-react';
@@ -41,8 +47,46 @@ export default class MainLayout extends Component<ILayoutProps> {
     this.props.uiStore.error = null;
   };
 
+  public renderContent() {
+    const { children, uiStore } = this.props;
+    if (!uiStore.isBackendLive) {
+      return (
+        <EmptyState
+          heading="The MyDownloader server is offline"
+          action={{
+            content: 'Go to Github.com to ask for assistance',
+            external: true,
+            url: 'https://github.com/mokto/mydownloader'
+          }}
+          image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
+        >
+          {/* <p>You can add TV Shows and Movies easily.</p> */}
+        </EmptyState>
+      );
+    }
+
+    return (
+      <Frame
+        topBar={<Header />}
+        navigation={<Navigation />}
+        showMobileNavigation={uiStore.showMobileNavigation}
+        onNavigationDismiss={this.navigationDismiss}
+      >
+        {uiStore.loading && <Loading />}
+        {uiStore.error && (
+          <Toast
+            content={uiStore.error}
+            error={true}
+            onDismiss={this.errorDismiss}
+          />
+        )}
+        {children}
+      </Frame>
+    );
+  }
+
   public render() {
-    const { pageTitle, children, uiStore } = this.props;
+    const { pageTitle } = this.props;
 
     return (
       <div>
@@ -57,24 +101,7 @@ export default class MainLayout extends Component<ILayoutProps> {
             href="https://sdks.shopifycdn.com/polaris/3.1.1/polaris.min.css"
           />
         </Head>
-        <AppProvider theme={this.theme}>
-          <Frame
-            topBar={<Header />}
-            navigation={<Navigation />}
-            showMobileNavigation={uiStore.showMobileNavigation}
-            onNavigationDismiss={this.navigationDismiss}
-          >
-            {uiStore.loading && <Loading />}
-            {uiStore.error && (
-              <Toast
-                content={uiStore.error}
-                error={true}
-                onDismiss={this.errorDismiss}
-              />
-            )}
-            {children}
-          </Frame>
-        </AppProvider>
+        <AppProvider theme={this.theme}>{this.renderContent()}</AppProvider>
       </div>
     );
   }

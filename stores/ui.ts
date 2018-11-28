@@ -3,6 +3,7 @@ import { observable } from 'mobx';
 export class UiStore {
   public rootStore;
 
+  @observable public isBackendLive = true;
   @observable public showMobileNavigation = false;
   @observable public loading = false;
   @observable public error: string;
